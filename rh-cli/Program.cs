@@ -207,17 +207,29 @@ namespace rh_cli
                     instrument.DayTradeRatio >= 0.50m ? "(2x Leveraged ETF)" : "");
 
             // get max
-            if (ap.ExcessMargin < account.EffectiveCash + account.MarginBalance.MarginLimit)
+            // restrict if equity is under 2000 
+            // we assume that if your equity is under 2000, your excess margin is as well.
+            if (ap.Equity < 2000)
+            {
+                Console.WriteLine("You can only purchase up to {0} of this stock as you are below the $2,000 minimum to open a leveraged position.",
+                    (ap.ExcessMargin).ToString("N2"));
+            }
+
+            else if (ap.ExcessMargin < account.EffectiveCash + account.MarginBalance.MarginLimit)
             {
                 Console.WriteLine("You can only purchase up to {0} of this stock due to initial margin requirements.", 
                     (ap.ExcessMargin/instrument.MarginInitialRatio).ToString("N2"));
+            }
+            else
+            {
+                Console.WriteLine("You may utilize your full extra buying power to purchase this stock.");
             }
 
             // if margin call
 
             if (ap.ExcessMargin < 0)
             {
-                Console.WriteLine("Your account is undergoing a margin call for {0}; you will need to liquidate {1} of this stock to cover this margin call.",
+                Console.WriteLine("Your account is undergoing a margin call for {0} and cannot open positions; you will need to liquidate {1} of this stock to cover this margin call.",
                 (Math.Abs(ap.ExcessMargin).ToString("C2")),
                 (Math.Abs(ap.ExcessMargin) / instrument.MaintenanceRatio).ToString("C2"));
             }
