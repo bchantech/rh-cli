@@ -176,20 +176,23 @@ namespace rh_cli
             // get max
             // restrict if equity is under 2000 
             // we assume that if your equity is under 2000, your excess margin is as well.
-            if (ap.Equity < 2000)
+            if (account.MarginBalance.MarginLimit > 0)
             {
-                Console.WriteLine("You can only purchase up to {0} of this stock as you are below the $2,000 minimum to open a leveraged position.",
-                    (ap.ExcessMargin).ToString("N2"));
-            }
+                if (ap.Equity < 2000)
+                {
+                    Console.WriteLine("You can only purchase up to {0} of this stock as you are below the $2,000 minimum to open a leveraged position.",
+                        (ap.ExcessMargin).ToString("N2"));
+                }
 
-            else if (ap.ExcessMargin < account.EffectiveCash + account.MarginBalance.MarginLimit)
-            {
-                Console.WriteLine("You can only purchase up to {0} of this stock due to initial margin requirements.", 
-                    (ap.ExcessMargin/instrument.MarginInitialRatio).ToString("N2"));
-            }
-            else
-            {
-                Console.WriteLine("You may utilize your full extra buying power to purchase this stock.");
+                else if (ap.ExcessMargin < account.EffectiveCash + account.MarginBalance.MarginLimit)
+                {
+                    Console.WriteLine("You can only purchase up to {0} of this stock due to initial margin requirements.",
+                        (ap.ExcessMargin / instrument.MarginInitialRatio).ToString("N2"));
+                }
+                else
+                {
+                    Console.WriteLine("You may utilize your full extra buying power to purchase this stock.");
+                }
             }
 
             // if margin call
@@ -398,9 +401,7 @@ namespace rh_cli
                 orderCol = Console.CursorLeft;
 
                 Console.SetCursorPosition(quoteCol, quoteRow);
-
                 
-
                 // if extended hours update slower
                 if (q4.LastExtendedHoursTradePrice != null)
                 {
@@ -416,25 +417,7 @@ namespace rh_cli
                     Console.SetCursorPosition(orderCol, orderRow);
                     System.Threading.Thread.Sleep(1000);
                 }
-
-                /*
-                // if extended hours update slower
-                if (q4.LastExtendedHoursTradePrice != null)
-                {
-                    Console.Write(q4.LastExtendedHoursTradePrice.Value.ToString("C3") + "\t(After Hours)");
-                    Console.SetCursorPosition(orderCol, orderRow);
-                    System.Threading.Thread.Sleep(60000);
-                }
-                else
-                {
-                    Console.Write(q4.LastTradePrice.ToString("C3") + "\t{0:hh:mm:ss tt}", q4.UpdatedAt);
-                    Console.SetCursorPosition(orderCol, orderRow);
-                    System.Threading.Thread.Sleep(1000);
-                }
-                */
-
-                //Console.SetCursorPosition(orderCol, orderRow);
-                //System.Threading.Thread.Sleep(1000);
+                
             }
         }
     }
