@@ -34,9 +34,9 @@ namespace BasicallyMe.RobinhoodNet
         public decimal? Low { get; set; }
         public decimal Volume { get; set; }
         public decimal? AverageVolume { get; set; }
-        public decimal High52Weeks { get; set; }
+        public decimal? High52Weeks { get; set; }
         public decimal? DividendYield { get; set; }
-        public decimal Low52Weeks { get; set; }
+        public decimal? Low52Weeks { get; set; }
         public decimal? MarketCap { get; set; }
         public decimal? PERatio { get; set; }
         public string Description { get; set; }
@@ -51,9 +51,9 @@ namespace BasicallyMe.RobinhoodNet
             Low = (decimal?)json["low"];
             Volume = (decimal)json["volume"];
             AverageVolume = (decimal?)json["average_volume"];
-            High52Weeks = (decimal)json["high_52_weeks"];
+            High52Weeks = (decimal?)json["high_52_weeks"];
             DividendYield = (decimal?)json["dividend_yield"];
-            Low52Weeks = (decimal)json["low_52_weeks"];
+            Low52Weeks = (decimal?)json["low_52_weeks"];
             MarketCap = (decimal?)json["market_cap"];
             PERatio = (decimal?)json["pe_ratio"];
             Description = (string)json["description"];

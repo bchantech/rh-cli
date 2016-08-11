@@ -207,6 +207,13 @@ namespace BasicallyMe.RobinhoodNet
             return new Quote(q);
         }
 
+        public async Task<InstrumentFundamentals>
+        DownloadFundamentals(string symbol)
+        {
+            var q = await _rawClient.DownloadInstrumentFundamentals(symbol);
+            return new InstrumentFundamentals(q);
+        }
+        
         public async Task<Quote>
           DownloadInstrument(string InstrumentURL)
         {

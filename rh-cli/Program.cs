@@ -36,13 +36,14 @@ namespace rh_cli
         protected static int quoteRow;
         protected static int quoteCol;
         protected static RobinhoodClient rh;
-       
+        protected static bool returnfundamentals = false;
+
 
         static void Main(string[] args)
         {
             rh = new RobinhoodClient();
             // Get usage if nothing entered
-            if (args.Length == 0)
+            if (args.Length == 0 || args[0] == "?")
             {
                 Console.WriteLine("Usage: 'rh <symbol>' or type in 'rh help' on available commands");
                 Environment.Exit(1);
@@ -100,12 +101,18 @@ namespace rh_cli
                 else
                 {
                     symbol = args[0];
+                    if (symbol.Last() == '?')
+                        returnfundamentals = true;
+                    symbol = symbol.TrimEnd('?');
                     symbol = symbol.ToUpperInvariant();
                 }
             }
             else
             {
                 symbol = args[0];
+                if (symbol.Last() == '?')
+                    returnfundamentals = true;
+                symbol = symbol.TrimEnd('?');
                 symbol = symbol.ToUpperInvariant();
             }
 
@@ -133,6 +140,10 @@ namespace rh_cli
 
             Console.WriteLine(instrument.Name + " (" + instrument.Symbol + ")");
             qqq = rh.DownloadQuote(symbol).Result;
+
+            if (returnfundamentals)
+                DisplayFundamentals(symbol, qqq.UpdatedAt);
+
             Console.Write("Last trade price: ");
             quoteRow = Console.CursorTop;
             quoteCol = Console.CursorLeft;

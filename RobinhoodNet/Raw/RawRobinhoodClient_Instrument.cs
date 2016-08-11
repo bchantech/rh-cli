@@ -27,7 +27,7 @@ namespace BasicallyMe.RobinhoodNet.Raw
         DownloadInstrumentFundamentals (string symbol)
         {
             var b = new UriBuilder(FUNDAMENTALS_URL);
-            b.Path = symbol + "/";
+            b.Path += symbol + "/";
             return doGet(b.Uri);
         }
 
