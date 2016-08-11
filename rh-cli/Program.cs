@@ -400,13 +400,22 @@ namespace rh_cli
                 Console.SetCursorPosition(quoteCol, quoteRow);
 
                 
-                Display_PriceChange(q4.LastTradePrice, q4.PreviousClose, false);
-                Console.Write(" {0:hh:mm:ss tt} EDT", q4_time);
-                Console.SetCursorPosition(orderCol, orderRow);
 
-                System.Threading.Thread.Sleep(1000);
-
-
+                // if extended hours update slower
+                if (q4.LastExtendedHoursTradePrice != null)
+                {
+                    Display_PriceChange(q4.LastExtendedHoursTradePrice.Value, q4.PreviousClose, false);
+                    Console.Write(" (After Hours)");
+                    Console.SetCursorPosition(orderCol, orderRow);
+                    System.Threading.Thread.Sleep(60000);
+                }
+                else
+                {
+                    Display_PriceChange(q4.LastTradePrice, q4.PreviousClose, false);
+                    Console.Write(" {0:hh:mm:ss tt} EDT", q4_time);
+                    Console.SetCursorPosition(orderCol, orderRow);
+                    System.Threading.Thread.Sleep(1000);
+                }
 
                 /*
                 // if extended hours update slower
