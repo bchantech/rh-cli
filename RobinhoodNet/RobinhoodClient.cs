@@ -221,6 +221,23 @@ namespace BasicallyMe.RobinhoodNet
           return new Quote(q);
         }
 
+        public IList<Splits>
+        DownloadAllInstrumentSplits(string SplitsURL, PagedResponse<Splits>.Cursor cursor = null)
+        {
+            cursor = new PagedResponse<Splits>.Cursor(SplitsURL);
+            List<Splits> list = new List<Splits>();
+            while (true)
+            {
+                var result = downloadPagedResult<Splits>(cursor, _rawClient.DownloadPositions, json => new Splits(json));
+                if (result.Result != null && result.Result.Items != null)
+                    list.AddRange(result.Result.Items);
+                if (result.Result == null || result.Result.Next == null)
+                    break;
+                cursor = result.Result.Next;
+            }
+            return list;
+        }
+        
         public async Task<IList<Quote>>
         DownloadQuote (IEnumerable<string> symbols)
         {

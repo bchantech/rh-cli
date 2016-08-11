@@ -21,5 +21,13 @@ namespace BasicallyMe.RobinhoodNet.Raw
             string url = USER_URL;
             return doGet(url);
         }
+        
+        public Task<JToken>
+        DownloadSplits(string splitsUrl = null)
+        {
+            string url = splitsUrl;
+            return doGet(url);
+        }
+
     }
 }

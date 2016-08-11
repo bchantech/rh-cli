@@ -143,7 +143,24 @@ namespace rh_cli
 
             if (returnfundamentals)
                 DisplayFundamentals(symbol, qqq.UpdatedAt);
-
+            
+            // Check for stock split
+            try
+            {
+                var split_check = rh.DownloadAllInstrumentSplits(instrument.InstrumentSplitsUrl.ToString()).First();
+                TimeSpan t2 = qqq.UpdatedAt - split_check.Execution_Date;
+                if (t2.Days <= 14)
+                {
+                    Console.WriteLine("NOTE: This stock underwent a {0} {1}stock split on {2:MMM d, yyyy}",
+                        split_check.Divisor.ToString("N0") + " for " + split_check.Multiplier.ToString("N0"),
+                        split_check.Divisor > split_check.Multiplier ? "reverse " : "",
+                        split_check.Execution_Date);
+                }
+            }
+            catch
+            {
+            }
+            
             Console.Write("Last trade price: ");
             quoteRow = Console.CursorTop;
             quoteCol = Console.CursorLeft;

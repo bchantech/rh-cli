@@ -22,6 +22,18 @@ namespace BasicallyMe.RobinhoodNet
             Execution_Date = (DateTime)json["execution_date"];
             Divisor = (decimal)json["divisor"];
             Multiplier = (decimal)json["multiplier"];
+
+            // Normalize so that divisor and/or multiplier are not below 1
+            if (Multiplier < 1)
+            {
+                Divisor /= Multiplier;
+                Multiplier /= Multiplier;
+            }
+            if (Divisor < 1)
+            {
+                Divisor /= Divisor;
+                Multiplier /= Divisor;
+            }
         }
     }
 }
