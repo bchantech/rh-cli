@@ -94,23 +94,7 @@ namespace rh_cli
                     }
                     Console.WriteLine("Cash on Hand: {0}", account.Cash.ToString("C2"));
                     Console.Write("Account Equity: ");
-                    Console.Write(ap.Equity.ToString("C3"));
-                    decimal acc_difference = (ap.Equity - ap.EquityPreviousClose) / ap.EquityPreviousClose;
-
-                    if (acc_difference >= 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(" +{0}", (ap.Equity - ap.EquityPreviousClose).ToString("F2"));
-                        Console.WriteLine(" (+{0})", acc_difference.ToString("P"));
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(" {0}", (ap.Equity - ap.EquityPreviousClose).ToString("F2"));
-                        Console.WriteLine(" ({0})", acc_difference.ToString("P"));
-                        Console.ResetColor();
-                    }
+                    Display_PriceChange(ap.Equity, ap.EquityPreviousClose);
                     Environment.Exit(0);
                 }
                 else
@@ -152,25 +136,8 @@ namespace rh_cli
             Console.Write("Last trade price: ");
             quoteRow = Console.CursorTop;
             quoteCol = Console.CursorLeft;
-            Console.Write(qqq.LastTradePrice.ToString("C3"));
 
-            // calculate previous close
-            Decimal close_difference = (qqq.LastTradePrice - qqq.PreviousClose) / qqq.PreviousClose;
-
-            if (close_difference >= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(" +{0}", (qqq.LastTradePrice - qqq.PreviousClose).ToString("F2"));
-                Console.WriteLine(" (+{0})", close_difference.ToString("P"));
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(" {0}", (qqq.LastTradePrice - qqq.PreviousClose).ToString("F2"));
-                Console.WriteLine(" ({0})", close_difference.ToString("P"));
-                Console.ResetColor();
-            }
+            Display_PriceChange(qqq.LastTradePrice, qqq.PreviousClose);
 
             Console.WriteLine("Initial / Maintainence Margin Requirement: {0} / {1}", instrument.MarginInitialRatio.ToString("P"), instrument.MaintenanceRatio.ToString("P"));
 
@@ -432,30 +399,10 @@ namespace rh_cli
 
                 Console.SetCursorPosition(quoteCol, quoteRow);
 
-
-                // calculate previous close
-                decimal close_difference = (q4.LastTradePrice - q4.PreviousClose) / q4.PreviousClose;
-
-                if (close_difference >= 0)
-                {
-                    Console.Write(q4.LastTradePrice.ToString("C3"));
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(" +{0}", (q4.LastTradePrice - q4.PreviousClose).ToString("F2"));
-                    Console.Write(" (+{0})", close_difference.ToString("P"));
-                    Console.ResetColor();
-                    Console.Write(" {0:hh:mm:ss tt} EDT", q4_time);
-                    Console.SetCursorPosition(orderCol, orderRow);
-                }
-                else
-                {
-                    Console.Write(q4.LastTradePrice.ToString("C3"));
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(" {0}", (q4.LastTradePrice - q4.PreviousClose).ToString("F2"));
-                    Console.Write(" ({0})", close_difference.ToString("P"));
-                    Console.ResetColor();
-                    Console.Write(" {0:hh:mm:ss tt} EDT", q4_time);
-                    Console.SetCursorPosition(orderCol, orderRow);
-                }
+                
+                Display_PriceChange(q4.LastTradePrice, q4.PreviousClose, false);
+                Console.Write(" {0:hh:mm:ss tt} EDT", q4_time);
+                Console.SetCursorPosition(orderCol, orderRow);
 
                 System.Threading.Thread.Sleep(1000);
 

@@ -46,6 +46,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rhcli_Auth.cs" />
+    <Compile Include="Rhcli_Display.cs" />
     <Compile Include="Rhcli_Help.cs" />
     <Compile Include="Rhcli_Positions.cs" />
   </ItemGroup>
