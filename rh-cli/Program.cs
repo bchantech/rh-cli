@@ -70,6 +70,7 @@ namespace rh_cli
                 if (args[0] == "positions")
                 {
                     GetAllPositions(account);
+                    Environment.Exit(0);
                 }
                 else if (args[0] == "account")
                 {

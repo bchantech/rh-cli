@@ -70,8 +70,6 @@ namespace rh_cli
 
 
                 Console.WriteLine("{0,-10}{1,10}{2,12}{3,12}{4,12}{5,12}", "Total", " ", equity_cur.ToString("F2"), " ", " ", total_pl.ToString("F2"));
-
-                Console.ReadKey();
             }
             catch
             {
