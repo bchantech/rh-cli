@@ -27,5 +27,29 @@ namespace rh_cli
             Console.ResetColor();
             if (newline) Console.WriteLine();
         }
+
+        // convert a large number to M, B, etc.
+        static string Display_ConvertLargeNumber(decimal? number)
+        {
+            if (number == null)
+                return "N/A";
+
+            if (number > 1000000000)
+            {
+                number /= 1000000000;
+                return Decimal.Round((decimal)number,2) + "B";
+            }
+            if (number > 1000000)
+            {
+                number /= 1000000;
+                return Decimal.Round((decimal)number, 2) + "M";
+            }
+            if (number > 10000)
+            {
+                number /= 1000;
+                return Decimal.Round((decimal)number, 2) + "K";
+            }
+            return number.ToString();
+        }
     }
 }
