@@ -43,10 +43,15 @@ namespace rh_cli
         {
             rh = new RobinhoodClient();
             // Get usage if nothing entered
-            if (args.Length == 0 || args[0] == "?")
+            if (args.Length == 0)
             {
                 Console.WriteLine("Usage: 'rh <symbol>' or type in 'rh help' on available commands");
-                Environment.Exit(1);
+                Environment.Exit(0);
+            }
+            else if (args.Length == 1 && (args[0] == "help" || args[0] == "?"))
+            {
+                GetHelp();
+                Environment.Exit(0);
             }
 
             // Authenticate the user
