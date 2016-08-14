@@ -100,8 +100,11 @@ namespace rh_cli
                     
                     }
                     Console.WriteLine("Cash on Hand: {0}", account.Cash.ToString("C2"));
+                    Console.WriteLine("Total value of all securities held: {0}", ap.MarketValue.ToString("C2"));
                     Console.Write("Account Equity: ");
                     Display_PriceChange(ap.Equity, ap.EquityPreviousClose);
+                    Console.Write("Maintainence Level: {0}", (ap.Equity - ap.ExcessMargin).ToString("C2"));
+                    Console.WriteLine();
                     Environment.Exit(0);
                 }
                 else
