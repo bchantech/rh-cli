@@ -191,15 +191,26 @@ namespace rh_cli
             instrument.MarginInitialRatio = Math.Max(instrument.MarginInitialRatio, 0.50m);
             instrument.MaintenanceRatio = Math.Max(instrument.MaintenanceRatio, 0.25m);
             if (instrument.MaintenanceRatio > instrument.MarginInitialRatio) instrument.MarginInitialRatio = instrument.MaintenanceRatio;
-
-
+            
             int qty = 0;
             Console.WriteLine("You currently have:");
             Console.WriteLine(" - ${0,11} Cash Balance", account.Cash.ToString("N2"));
-            Console.WriteLine(" - ${0,11} Tradable Margin Balance", (account.EffectiveCash+account.MarginBalance.MarginLimit).ToString("N2"));
+
+            if (account.AccountType == "cash")
+            {
+                Console.WriteLine(" - ${0,11} Unsettled Funds", account.UnsettledFunds.ToString("N2"));
+            }
+            else
+            {
+                Console.WriteLine(" - ${0,11} Margin Buying Power", (account.EffectiveCash + account.MarginBalance.MarginLimit).ToString("N2"));
+            }
+
             if (account.CashHeldForOrders > 0)
                 Console.WriteLine(" - ${0,11} Cash held in Buy orders ", account.CashHeldForOrders.ToString("N2"));
-            Console.WriteLine(" - ${0,11} Buying Power", account.BuyingPower.ToString("N2"));
+
+            // actually SMA
+            //Console.WriteLine(" - ${0,11} Buying Power", account.BuyingPower.ToString("N2"));
+
             if (account.DTBP != null)
                 Console.WriteLine(" - ${0,11} Intraday Buying Power {1}",
                     (account.DTBP.Value / instrument.DayTradeRatio).ToString("N2"),
