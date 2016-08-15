@@ -49,6 +49,8 @@ namespace BasicallyMe.RobinhoodNet
         public decimal DayTradeRatio { get; set; }
         public decimal OvernightRatio { get; set; }
 
+        public decimal OutstandingInterest { get; set; }
+
         public MarginBalance()
         {
 
@@ -75,6 +77,8 @@ namespace BasicallyMe.RobinhoodNet
 
             this.DayTradeRatio = (decimal)json["day_trade_ratio"];
             this.OvernightRatio = (decimal)json["overnight_ratio"];
+
+            this.OutstandingInterest = (decimal)json["outstanding_interest"];
         }
     }
 

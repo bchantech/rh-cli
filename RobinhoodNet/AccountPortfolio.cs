@@ -33,6 +33,7 @@ namespace BasicallyMe.RobinhoodNet
         public decimal AdjustedEquityPreviousClose { get; set; }
         public decimal MarketValue { get; set; }
         public decimal LastCoreMarketValue { get; set; }
+        public decimal WithdrawableAmount { get; set; }
         public decimal? ExtendedHoursEquity { get; set; }
         public decimal ExcessMargin { get; set; }
         public decimal ExcessMarginWithUnclearedDeposits { get; set; }
@@ -61,6 +62,7 @@ namespace BasicallyMe.RobinhoodNet
             EquityPreviousClose = (decimal)json["equity_previous_close"];
             StartDate = (DateTime)json["start_date"];
             ExtendedHoursMarketValue = (decimal?)json["extended_hours_market_value"];
+            WithdrawableAmount = (decimal)json["withdrawable_amount"];
         }
     }
 }
