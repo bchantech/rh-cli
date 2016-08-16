@@ -16,6 +16,13 @@ namespace BasicallyMe.RobinhoodNet.Raw
         }
 
         public Task<JToken>
+        DownloadDayTrades(string account)
+        {
+            string url = ACCOUNTS_URL + account + "/recent_day_trades/";
+            return doGet(url);
+        }
+
+        public Task<JToken>
         DownloadUserInfo()
         {
             string url = USER_URL;

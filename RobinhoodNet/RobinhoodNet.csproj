@@ -32,6 +32,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AccountDaytrades.cs" />
     <Compile Include="ACHRelationship.cs" />
     <Compile Include="ACHTransfer.cs" />
     <Compile Include="Dividend.cs" />
