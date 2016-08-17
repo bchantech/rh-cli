@@ -176,7 +176,18 @@ namespace rh_cli
 
             Display_PriceChange(qqq.LastTradePrice, qqq.PreviousClose);
 
-            Console.WriteLine("Initial / Maintainence Margin Requirement: {0} / {1}", instrument.MarginInitialRatio.ToString("P"), instrument.MaintenanceRatio.ToString("P"));
+            Console.Write("Initial / Maintainence Margin Requirement: ");
+
+            if (instrument.MarginInitialRatio > 0.5m)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(instrument.MarginInitialRatio.ToString("P"));
+            Console.ResetColor();
+            Console.Write(" / ");
+
+            if (instrument.MaintenanceRatio > 0.25m)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(instrument.MaintenanceRatio.ToString("P"));
+            Console.ResetColor();
 
             if (!instrument.IsTradeable)
             {
