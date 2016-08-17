@@ -352,6 +352,19 @@ namespace rh_cli
                 string p = Console.ReadLine();
                 if (Decimal.TryParse(p, out price))
                 {
+                    // warn if way lower than limit price.
+                    if (price / qqq.LastTradePrice < 0.6m)
+                    {
+                        Console.Write("NOTE: Your limit price is way below last trade price. Press C to confirm, anything else to re-enter. ");
+                        var x = Console.ReadKey();
+                        if (x.KeyChar == 'c' || x.KeyChar == 'C')
+                        {
+                            Console.WriteLine();
+                            break;
+                        }
+                        Console.WriteLine();
+                        continue;
+                    }
                     break;
                 }
             }
