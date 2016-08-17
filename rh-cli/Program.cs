@@ -386,7 +386,7 @@ namespace rh_cli
 
 
 
-            Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-8}{4,-20}",
+            Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-9}{4,-20}",
                                 order.Side,
                                 instrument.Symbol,
                                 order.Quantity,
@@ -402,7 +402,7 @@ namespace rh_cli
                 order_update = rh.DownloadSingleOrder(order_id).Result;
             }
 
-            Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-8}{4,-20}",
+            Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-9}{4,-20}",
                                 order_update.Side,
                                 instrument.Symbol,
                                 order_update.Quantity,
