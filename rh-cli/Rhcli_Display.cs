@@ -12,7 +12,7 @@ namespace rh_cli
     {
         static void Display_PriceChange(decimal LastPrice, decimal PrevClose, bool newline = true)
         {
-            Console.Write(LastPrice.ToString("C3"));
+            Console.Write("{0,-9}",LastPrice.ToString("C3"));
 
             decimal close_difference = (LastPrice - PrevClose) / PrevClose;
 
@@ -20,10 +20,12 @@ namespace rh_cli
             else Console.ForegroundColor = ConsoleColor.Red;
 
 
-            Console.Write(" {0}{1}",
+            Console.Write(" {0}{1,-8}",
                 close_difference >= 0 ? "+" : "",
                 (LastPrice - PrevClose).ToString("F2"));
-            Console.Write(" ({0})", close_difference.ToString("P"));
+            Console.Write(" {0,-12}{1}", "(" + close_difference.ToString("P") + ")",
+                close_difference <= 0 ? " " : "");
+
             Console.ResetColor();
             if (newline) Console.WriteLine();
         }

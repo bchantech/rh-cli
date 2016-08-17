@@ -118,11 +118,32 @@ namespace rh_cli
             }
             else
             {
-                symbol = args[0];
-                if (symbol.Last() == '?')
-                    returnfundamentals = true;
-                symbol = symbol.TrimEnd('?');
-                symbol = symbol.ToUpperInvariant();
+                // Query multiple symbols.
+                args = args.Select(s => s.ToUpperInvariant()).ToArray();
+                Console.WriteLine("Continuously monitoring entered stocks, CTRL+C to exit");
+                Console.CursorVisible = false;
+                quoteRow = Console.CursorTop;
+                quoteCol = Console.CursorLeft;
+                while (true)
+                {
+                    var quotes = rh.DownloadQuote(args).Result;
+                    foreach (Quote q in quotes)
+                    {
+                        Console.Write("{0,-6}",q.Symbol);
+                        Display_PriceChange(q.LastTradePrice, q.PreviousClose,false);
+                        Console.WriteLine(" {0:hh:mm:ss tt} GMT", q.UpdatedAt);
+                    }
+
+                    // Set delay based on how many stocks we are watching at once
+                    if (args.Length < 10)
+                       System.Threading.Thread.Sleep(1000);
+                    else if (args.Length < 25)
+                       System.Threading.Thread.Sleep(3000);
+                    else
+                        System.Threading.Thread.Sleep(5000);
+
+                    Console.SetCursorPosition(quoteCol, quoteRow);
+                }
             }
 
             try

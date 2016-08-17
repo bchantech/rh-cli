@@ -41,8 +41,7 @@ If 'command' is not any listed below it is assumed to be a quote
 Commands:
 <quote>         Bring up a real-time quote, where you can buy and sell shares.
                 Append a ? after it to get more info on the stock in question.
-<quote,...>     Allows you to monitor multiple stocks in real time, up  to  a
-                maximum of 20. You cannot buy and sell in this window.
+                Enter more than one symbol to monitor multiple stocks in realtime.
 orders <symbol> Bring up your recent orders for a particular symbol.
 account         Brings up some of your basic account information.
 positions       Bring up a list of your open positions, with  the  stock  you
