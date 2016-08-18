@@ -59,6 +59,16 @@ deposit         Allows you to send transfer money into RH. You will need  the
                 confirm before initating a transfer.
 withdraw        Allows you to transfer money from RH into your bank.
 
+Order Options:
+gtc             Good Til Canceled
+gfd             Good For Day - Expires at end of day.
+stop            Stop Loss Order - Executes when price is belo w a  set  price
+                when selling, and above a set price when buying. 5% collar.
+stopl           Stop Limit Order. Same as Stop Loss  except  places  a  limit
+                order at the specified price instead when the order executes.
+ah              Allows your order to fill  during  extended  hours  (if  your
+                account allows it). 
+
 ");
             
         }

@@ -54,8 +54,7 @@ namespace BasicallyMe.RobinhoodNet
     {
         Unknown,
         Limit,
-        Market,
-        StopLoss
+        Market
     }
 
     public enum StateType

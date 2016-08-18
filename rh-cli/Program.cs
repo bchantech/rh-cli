@@ -69,7 +69,6 @@ namespace rh_cli
             AccountPortfolio ap = rh.DownloadSinglePortfolio(account.AccountNumber).Result;
             Quote qqq = null;
 
-
             if (args.Length == 1)
             {
                 if (args[0] == "positions")
@@ -332,26 +331,70 @@ namespace rh_cli
                 Console.WriteLine("Max you can sell: " + Math.Max(pp.Quantity - pp.SharesHeldForSells, 0).ToString("F0"));
 
             var t = Task.Run(() => UpdateQuote());
+            TimeInForce tif = TimeInForce.GoodForDay;
+            bool stoploss = false;
+            bool stoplimit = false;
+            bool afterhours = false;
+
+
             while (true)
             {
 
-                Console.Write("Quantity to buy (negative for sell): ");
+                Console.Write("Quantity to buy (negative for sell) or set a order option: ");
 
                 string q = Console.ReadLine();
-                
+                q = q.ToLowerInvariant();
+
+                if (q.Equals("GFD", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Placing a Good For Day order.");
+                    tif = TimeInForce.GoodForDay;
+                }
+                else if (q.Equals("GTC", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Placing a Good Til Canceled order.");
+                    tif = TimeInForce.GoodTillCancel;
+                }
+                else if (q.Equals("STOP", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Placing a {0} Stop Loss order.", tif == TimeInForce.GoodForDay ? "Good for Day" : "Good Til Canceled");
+
+                    stoploss = true;
+                    stoplimit = false;
+                }
+                else if (q.Equals("STOPL", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Placing a {0} Stop Limit order.", tif == TimeInForce.GoodForDay ? "Good for Day" : "Good Til Canceled");
+                    stoploss = false;
+                    stoplimit = true;
+                }
+                else if (q.Equals("AH", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Placing an after-hours expiry order (Please ensure your account level supports this order).");
+                    afterhours = true;
+                }
+
                 if (Int32.TryParse(q, out qty))
                 {
                     break;
                 }
             }
 
+            var newOrderSingle = new NewOrderSingle(instrument);
+
             decimal price = 0m;
-            while (true)
+            while (true && !(stoploss || stoplimit))
             {
                 Console.Write("Limit price (0 applies a 5% collared Market order): ");
                 string p = Console.ReadLine();
                 if (Decimal.TryParse(p, out price))
                 {
+                    if (price < 0)
+                    {
+                        Console.WriteLine("Invalid price entered.");
+                        continue;
+                    }
+
                     // warn if way lower than limit price.
                     if (price / qqq.LastTradePrice < 0.6m)
                     {
@@ -368,29 +411,29 @@ namespace rh_cli
                     break;
                 }
             }
-
-            TimeInForce tif = TimeInForce.GoodForDay;
-
-            /*
-            TimeInForce tif = TimeInForce.Unknown;
-            while (true)
+            
+            while (stoploss || stoplimit)
             {
-                Console.Write("Time in Force (GFD or GTC): ");
-                string t = Console.ReadLine();
-                if (t.Equals("GFD", StringComparison.InvariantCultureIgnoreCase))
+                Console.Write("Stop Price{0}: ", stoploss ? " (Converts to a 5% collared Market order when triggered)" : "" );
+                string p = Console.ReadLine();
+                if (Decimal.TryParse(p, out price))
                 {
-                    tif = TimeInForce.GoodForDay;
-                    break;
-                }
-                else if (t.Equals("GTC", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    tif = TimeInForce.GoodTillCancel;
+                    if (price <= 0)
+                    {
+                        Console.WriteLine("Invalid price entered.");
+                        continue;
+                    }
+
+                    newOrderSingle.StopPrice = price;
+                    newOrderSingle.Trigger = TriggerType.Stop;
+
+                    // price is zero to trigger the next loop
+                    if (stoploss) price = 0;
+
                     break;
                 }
             }
-            */
 
-            var newOrderSingle = new NewOrderSingle(instrument);
             newOrderSingle.AccountUrl = account.AccountUrl;
             newOrderSingle.Quantity = Math.Abs(qty);
             newOrderSingle.Side = qty > 0 ? Side.Buy : Side.Sell;
@@ -399,6 +442,10 @@ namespace rh_cli
             if (price == 0)
             {
                 price = qqq.LastTradePrice;
+
+                // restore the price back to its entered price if stop
+                if (stoploss) price = newOrderSingle.StopPrice.Value;
+
                 newOrderSingle.OrderType = OrderType.Market;
                 if (newOrderSingle.Side == Side.Buy)
                 {
@@ -406,7 +453,7 @@ namespace rh_cli
                 }
                 else
                 {
-                    newOrderSingle.Price = price * 0.95m;
+                    newOrderSingle.Price = price * 0.75m;
                 }
             }
             else
@@ -414,6 +461,9 @@ namespace rh_cli
                 newOrderSingle.OrderType = OrderType.Limit;
                 newOrderSingle.Price = price;
             }
+
+            // afterhours flag
+            if (afterhours) newOrderSingle.ExtendedHours = true;
 
             // todo: print message if order could not be submitted at this time.
             var order = rh.PlaceOrder(newOrderSingle).Result;

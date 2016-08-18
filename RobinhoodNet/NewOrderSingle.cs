@@ -63,18 +63,22 @@ namespace BasicallyMe.RobinhoodNet
 
         public decimal? StopPrice { get; set; }
 
+        public bool ExtendedHours { get; set; }
+
         public NewOrderSingle()
         {
             TimeInForce = TimeInForce.GoodForDay;
             Side        = Side.Buy;
             Trigger     = TriggerType.Immediate;
             OrderType   = OrderType.Limit;
+            ExtendedHours = false;
         }
 
         public NewOrderSingle(Instrument instrument) : this()
         {
             Symbol        = instrument.Symbol;
             InstrumentUrl = instrument.InstrumentUrl;
+            ExtendedHours = false;
         }
 
         internal IDictionary<string, string> ToDictionary()
@@ -102,6 +106,11 @@ namespace BasicallyMe.RobinhoodNet
             if(this.StopPrice.HasValue)
             {
               d.Add("stop_price", this.StopPrice.Value.ToString());
+            }
+
+            if (this.ExtendedHours)
+            {
+                d.Add("extended_hours", "true");
             }
 
             return d;
