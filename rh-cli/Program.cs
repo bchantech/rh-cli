@@ -125,23 +125,33 @@ namespace rh_cli
                 quoteCol = Console.CursorLeft;
                 while (true)
                 {
-                    var quotes = rh.DownloadQuote(args).Result;
-                    foreach (Quote q in quotes)
+                    try
                     {
-                        Console.Write("{0,-6}",q.Symbol);
-                        Display_PriceChange(q.LastTradePrice, q.PreviousClose,false);
-                        Console.WriteLine(" {0:hh:mm:ss tt} GMT", q.UpdatedAt);
+                        var quotes = rh.DownloadQuote(args).Result;
+                        foreach (Quote q in quotes)
+                        {
+                            if (q == null) continue;
+
+                            Console.Write("{0,-6}", q.Symbol);
+                            Display_PriceChange(q.LastTradePrice, q.PreviousClose, false);
+                            Console.WriteLine(" {0:hh:mm:ss tt} GMT", q.UpdatedAt);
+                        }
+
+                        // Set delay based on how many stocks we are watching at once
+                        if (args.Length < 10)
+                            System.Threading.Thread.Sleep(1000);
+                        else if (args.Length < 25)
+                            System.Threading.Thread.Sleep(3000);
+                        else
+                            System.Threading.Thread.Sleep(5000);
+
+                        Console.SetCursorPosition(quoteCol, quoteRow);
                     }
-
-                    // Set delay based on how many stocks we are watching at once
-                    if (args.Length < 10)
-                       System.Threading.Thread.Sleep(1000);
-                    else if (args.Length < 25)
-                       System.Threading.Thread.Sleep(3000);
-                    else
-                        System.Threading.Thread.Sleep(5000);
-
-                    Console.SetCursorPosition(quoteCol, quoteRow);
+                    catch
+                    {
+                        Console.WriteLine("None of the symbols entered were found.");
+                        Environment.Exit(1);
+                    }
                 }
             }
 
