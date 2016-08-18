@@ -24,7 +24,7 @@ namespace rh_cli
                 close_difference >= 0 ? "+" : "",
                 (LastPrice - PrevClose).ToString("F2"));
             Console.Write(" {0,-12}{1}", "(" + close_difference.ToString("P") + ")",
-                close_difference <= 0 ? " " : "");
+                close_difference < 0 ? " " : "");
 
             Console.ResetColor();
             if (newline) Console.WriteLine();
