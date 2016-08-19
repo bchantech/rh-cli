@@ -271,13 +271,13 @@ namespace rh_cli
                 if (ap.Equity < 2000)
                 {
                     Console.WriteLine("You can only purchase up to {0} of this stock as you are below the $2,000 minimum to open a leveraged position.",
-                        (ap.ExcessMargin).ToString("N2"));
+                        (Math.Min(0,(account.EffectiveCash)).ToString("C2")));
                 }
 
                 else if (ap.ExcessMargin < account.EffectiveCash + account.MarginBalance.MarginLimit)
                 {
                     Console.WriteLine("You can only purchase up to {0} of this stock due to initial margin requirements.",
-                        (ap.ExcessMargin / instrument.MarginInitialRatio).ToString("N2"));
+                        (ap.ExcessMargin / instrument.MarginInitialRatio).ToString("C2"));
                 }
                 else
                 {
