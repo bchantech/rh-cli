@@ -98,6 +98,7 @@ namespace rh_cli
                         }
                     
                     }
+                    Console.WriteLine("Max Gold Extra Buying Power: {0}", ((account.Sma+account.UnclearedDeposits)*2-account.EffectiveCash).Value.ToString("C2"));
                     Console.WriteLine("Cash on Hand: {0}", account.Cash.ToString("C2"));
                     Console.WriteLine("Total value of all securities held: {0}", ap.MarketValue.ToString("C2"));
                     Console.Write("Account Equity: ");
