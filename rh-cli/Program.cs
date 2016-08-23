@@ -510,6 +510,10 @@ namespace rh_cli
             }
             else if (order_update.CancelUrl != null)
             {
+                // display SL trigger price
+                if (stoploss || stoplimit)
+                    Console.WriteLine("This order will trigger when the price hits {0}.", order_update.StopPrice.Value.ToString("C2"));
+
                 Console.WriteLine("Press C to cancel this order, or anything else to quit");
                 var x = Console.ReadKey();
                 if (x.KeyChar == 'c' || x.KeyChar == 'C')
