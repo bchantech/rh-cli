@@ -475,19 +475,25 @@ namespace rh_cli
 
             // afterhours flag
             if (afterhours) newOrderSingle.ExtendedHours = true;
+            string order_id = "";
 
-            // todo: print message if order could not be submitted at this time.
-            var order = rh.PlaceOrder(newOrderSingle).Result;
-
-
-
-            Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-9}{4,-20}",
-                                order.Side,
-                                instrument.Symbol,
-                                order.Quantity,
-                                newOrderSingle.OrderType == OrderType.Limit ? order.Price.Value.ToString("F4") : "mkt",
-                                order.State);
-            string order_id = order.OrderId;
+            try
+            {
+                var order = rh.PlaceOrder(newOrderSingle).Result;
+                Console.WriteLine("{0,-10}{1,-6} {2,5} x {3,-9}{4,-20}",
+                                    order.Side,
+                                    instrument.Symbol,
+                                    order.Quantity,
+                                    newOrderSingle.OrderType == OrderType.Limit ? order.Price.Value.ToString("F4") : "mkt",
+                                    order.State);
+                order_id = order.OrderId;
+            }
+            catch ()
+            {
+                Console.WriteLine("ERROR: There was a problem with your order; your order has not been submitted.");
+                Environment.Exit(2);
+            }
+            
             System.Threading.Thread.Sleep(150);
             // update to see what happened
             var order_update = rh.DownloadSingleOrder(order_id).Result;
@@ -518,7 +524,7 @@ namespace rh_cli
                 var x = Console.ReadKey();
                 if (x.KeyChar == 'c' || x.KeyChar == 'C')
                 {
-                    rh.CancelOrder(order.CancelUrl).Wait();
+                    rh.CancelOrder(order_update.CancelUrl).Wait();
                     Console.WriteLine("Cancelled");
                 }
             }
