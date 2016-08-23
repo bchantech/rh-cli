@@ -42,6 +42,7 @@ namespace BasicallyMe.RobinhoodNet
         public decimal EquityPreviousClose { get; set; }
         public DateTime StartDate { get; set; }
         public decimal? ExtendedHoursMarketValue { get; set; }
+        public decimal UnwithdrawableDeposits { get; set; }
 
         public AccountPortfolio()
         {
@@ -63,6 +64,7 @@ namespace BasicallyMe.RobinhoodNet
             StartDate = (DateTime)json["start_date"];
             ExtendedHoursMarketValue = (decimal?)json["extended_hours_market_value"];
             WithdrawableAmount = (decimal)json["withdrawable_amount"];
+            UnwithdrawableDeposits = (decimal)json["unwithdrawable_deposits"];
         }
     }
 }
