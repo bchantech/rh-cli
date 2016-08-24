@@ -124,11 +124,13 @@ namespace rh_cli
                 Console.CursorVisible = false;
                 quoteRow = Console.CursorTop;
                 quoteCol = Console.CursorLeft;
+                bool looped_quotes = false;
                 while (true)
                 {
                     try
                     {
                         var quotes = rh.DownloadQuote(args).Result;
+                        looped_quotes = true;
                         foreach (Quote q in quotes)
                         {
                             if (q == null) continue;
@@ -150,8 +152,17 @@ namespace rh_cli
                     }
                     catch
                     {
-                        Console.WriteLine("None of the symbols entered were found.");
-                        Environment.Exit(1);
+                        if (!looped_quotes)
+                        {
+                            Console.WriteLine("None of the symbols entered were found.");
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            // If the initial quote loaded, but connection lost or throttled when refreshing,
+                            // delay by 15s instead until that ends.
+                            System.Threading.Thread.Sleep(15000);
+                        }
                     }
                 }
             }
@@ -488,7 +499,7 @@ namespace rh_cli
                                     order.State);
                 order_id = order.OrderId;
             }
-            catch ()
+            catch
             {
                 Console.WriteLine("ERROR: There was a problem with your order; your order has not been submitted.");
                 Environment.Exit(2);
