@@ -120,6 +120,11 @@ namespace rh_cli
             {
                 // Query multiple symbols.
                 args = args.Select(s => s.ToUpperInvariant()).ToArray();
+                if (args.Length > 50)
+                {
+                    Console.WriteLine("More than 50 stocks entered, will monitor only the first 50.");
+                    Array.Resize(ref args, 50);
+                }
                 Console.WriteLine("Continuously monitoring entered stocks, CTRL+C to exit");
                 Console.CursorVisible = false;
                 quoteRow = Console.CursorTop;
