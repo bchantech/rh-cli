@@ -81,7 +81,7 @@ namespace BasicallyMe.RobinhoodNet.Raw
             _httpClient.DefaultRequestHeaders.Add(
                 "Accept-Language",
                 "en;q=1, fr;q=0.9, de;q=0.8, ja;q=0.7, nl;q=0.6, it;q=0.5");
-            _httpClient.DefaultRequestHeaders.Add("X-Robinhood-API-Version", "1.101.0");
+            _httpClient.DefaultRequestHeaders.Add("X-Robinhood-API-Version", "1.101.11");
             _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Robinhood/823 (iPhone; iOS 7.1.2; Scale/2.00)");
         }
