@@ -73,7 +73,7 @@ namespace rh_cli
             }
             catch
             {
-                Console.WriteLine("You are currently not in any positions.");
+                Console.WriteLine("You currently do not have any open positions.");
             }
         }
     }
