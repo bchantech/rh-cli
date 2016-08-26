@@ -90,18 +90,13 @@ ah              Allows your order to fill  during  extended  hours  (if  your
                 "end of the trading day. \n\nDo you want to continue?");
         }
 
-        void WarningNotEnoughCash()
+        static void WarningCashViolation(bool filled = true)
         {
-            Console.WriteLine("WARNING: You do not have enough cash but have a " +
-                "pending deposit that will cover the cost. If your deposit reverses " +
-                "or if you sell this stock before your transfer completes you may " +
-                "incur a freeriding violation.\n\nDo you want to continue?");
-        }
-        void WarningGoodFaith()
-        {
-            Console.WriteLine("WARNING: You are attempting to buy this stock with "+
-                "unsettled funds. Selling this position before funds are settled may "+
-                "incur a good faith violation.\n\nDo you want to continue?");
+            Console.WriteLine("WARNING: You are buying this stock with "+
+                "unsettled funds. {1}elling this position before funds are settled may "+
+                "incur a 90-day restriction on your account.",
+                filled ? "S" : " If this order executes, s"
+                );
         }
 
         void WarningBuyLowMaintainence()

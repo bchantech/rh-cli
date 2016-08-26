@@ -554,6 +554,17 @@ namespace rh_cli
                 {
                     Console.WriteLine("Total fees from this transaction: " + order_update.Fees.ToString("C"));
                 }
+
+                // check if the account was cash, and warn if reserved buy > cash)
+                if (account.AccountType == "cash" && account.CashHeldForOrders > account.Cash)
+                {
+                    if (order_update.State == "filled" )
+                        WarningCashViolation(true);
+                    else
+                    {
+                        WarningCashViolation(false);
+                    }
+                }
                 
             }
 
