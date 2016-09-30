@@ -16,7 +16,14 @@ namespace rh_cli
 
             Console.WriteLine("Stats: (as of {0:hh:mm tt} GMT)", time);
 
-            Console.WriteLine("Today's Range:     {0}-{1}", instrument_detailed.Low.Value.ToString("F2"), instrument_detailed.High.Value.ToString("F2"));
+            try
+            {
+                Console.WriteLine("Today's Range:     {0}-{1}", instrument_detailed.Low.Value.ToString("F2"), instrument_detailed.High.Value.ToString("F2"));
+            }
+            catch
+            {
+                Console.WriteLine("Today's Range:     Unavailable");
+            }
             if (instrument_detailed.Low52Weeks != null && instrument_detailed.High52Weeks != null)
                 Console.WriteLine("52wk Range:        {0}-{1}", instrument_detailed.Low52Weeks.Value.ToString("F2"), instrument_detailed.High52Weeks.Value.ToString("F2"));
             else
